@@ -330,6 +330,7 @@ class TicBase : ActionListener {
                 if (squares[selectedSquare]!!.text == "") {
                     gotEmptySquare = true // чтобы выйти из цикла
                 }
+
             } while (!gotEmptySquare)
             return selectedSquare
         }
