@@ -1,114 +1,10 @@
-/**
- * Игра крестики-нолики на доске 3Х3
- */
-package View
+package Controler
 
-import java.awt.BorderLayout
+import view.TicTacGUI
 import java.awt.Color
-import java.awt.Font
-import java.awt.GridLayout
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
-import javax.swing.JButton
-import javax.swing.JFrame
-import javax.swing.JLabel
-import javax.swing.JPanel
 
-class TicBase : ActionListener {
-    var squares = arrayOfNulls<JButton>(9)
-    var frame: JFrame
-    var newGameButton: JButton
-    var windowsContent = JPanel()
-    var playing_field = JPanel()
-    var score: JLabel
-    var emptySquaresLeft = 9
+class TicTacComputer constructor(var ticTacGUI: TicTacGUI) {
 
-    init {
-        val borderLayout = BorderLayout()
-        windowsContent.layout = borderLayout
-        windowsContent.background = Color.CYAN
-
-        //Создаем шрифты для кнопок и метка счета
-        val labelFont = Font(Font.MONOSPACED, Font.BOLD, 30)
-        val buttonFont = Font(Font.MONOSPACED, Font.BOLD, 40)
-        newGameButton = JButton("Новая игра")
-        newGameButton.font = buttonFont
-
-        //Создаем метку для счета и задаем ее шрифт
-        score = JLabel()
-        score.text = "Ваш ход"
-        score.font = labelFont
-        windowsContent.add("North", newGameButton)
-        windowsContent.add("South", score)
-        for (i in 0..8) {
-            squares[i] = JButton("")
-        }
-
-        //Размещаем кнопки на игровом поле
-        val gridLayout = GridLayout(3, 3)
-        playing_field.layout = gridLayout
-        for (i in squares.indices) {
-            playing_field.add(squares[i])
-        }
-        windowsContent.add("Center", playing_field)
-        frame = JFrame("Крестики-нолики")
-        frame.contentPane = windowsContent
-        frame.setSize(300, 400)
-        frame.isVisible = true
-        for (i in squares.indices) {
-            squares[i]!!.addActionListener(this)
-            squares[i]!!.background = Color.ORANGE
-        }
-        newGameButton.addActionListener(this)
-    }
-
-    /**
-     * Этот метод будет обрабатывать все события
-     *
-     * @param e объект
-     */
-    override fun actionPerformed(e: ActionEvent) {
-        val theButton = e.source as JButton
-
-        //Это кнопка Новая игра?
-        if (theButton === newGameButton) {
-            for (i in squares.indices) {
-                squares[i]!!.isEnabled = true
-                squares[i]!!.text = ""
-                squares[i]!!.background = Color.ORANGE
-            }
-            emptySquaresLeft = 9
-            score.text = "Ваш ход"
-            newGameButton.isEnabled = true
-            return
-        }
-        var winner = ""
-
-        //Это одна из клеток?
-        for (square in squares) {
-            if (theButton === square) {
-                square.text = "X"
-                winner = lookForWinner()
-                if ("" != winner) {
-                    endTheGame()
-                } else {
-                    computerMove()
-                    winner = lookForWinner()
-                    if ("" != winner) {
-                        endTheGame()
-                    }
-                }
-                break
-            }
-        } //Конец цикла for
-        if (winner == "X") {
-            score.text = "Вы выиграли!"
-        } else if (winner == "0") {
-            score.text = "Вы проиграли!"
-        } else if (winner == "T") {
-            score.text = "Ничья!"
-        }
-    } //Конец метода actionPerformed
 
     /**
      * Этот метод вызывается после каждого хода, чтобы узнать,
@@ -118,66 +14,68 @@ class TicBase : ActionListener {
      * @return "X", "0", "T" - ничья, "" - еще нет победителя
      */
     fun lookForWinner(): String {
+
+
         var theWinner = ""
-        emptySquaresLeft--
-        if (emptySquaresLeft == 0) {
+        ticTacGUI.emptySquaresLeft--
+        if (ticTacGUI.emptySquaresLeft == 0) {
             return "T" //Это ничья, Т от tie
         }
 
         //Проверяем ряд 1
-        if (squares[0]!!.text != "" && squares[0]!!.text == squares[1]!!
-                .text && squares[0]!!.text == squares[2]!!.text
+        if (ticTacGUI.squares[0]!!.text != "" && ticTacGUI.squares[0]!!.text ==ticTacGUI.squares[1]!!
+                .text && ticTacGUI.squares[0]!!.text ==ticTacGUI.squares[2]!!.text
         ) {
-            theWinner = squares[0]!!.text
+            theWinner = ticTacGUI.squares[0]!!.text
             hightlightWinner(0, 1, 2)
         }
         //Проверяем ряд 2
-        if (squares[3]!!.text != "" && squares[3]!!.text == squares[4]!!
-                .text && squares[3]!!.text == squares[5]!!.text
+        if (ticTacGUI.squares[3]!!.text != "" &&ticTacGUI.squares[3]!!.text ==ticTacGUI.squares[4]!!
+                .text && ticTacGUI.squares[3]!!.text ==ticTacGUI.squares[5]!!.text
         ) {
-            theWinner = squares[3]!!.text
+            theWinner =ticTacGUI.squares[3]!!.text
             hightlightWinner(3, 4, 5)
         }
         //Проверяем ряд 3
-        if (squares[6]!!.text != "" && squares[6]!!.text == squares[7]!!
-                .text && squares[6]!!.text == squares[8]!!.text
+        if (ticTacGUI.squares[6]!!.text != "" &&ticTacGUI.squares[6]!!.text ==ticTacGUI.squares[7]!!
+                .text &&ticTacGUI.squares[6]!!.text ==ticTacGUI.squares[8]!!.text
         ) {
-            theWinner = squares[6]!!.text
+            theWinner =ticTacGUI.squares[6]!!.text
             hightlightWinner(6, 7, 8)
         }
         //Проверяем колонку 1
-        if (squares[0]!!.text != "" && squares[0]!!.text == squares[3]!!
-                .text && squares[0]!!.text == squares[6]!!.text
+        if (ticTacGUI.squares[0]!!.text != "" &&ticTacGUI.squares[0]!!.text ==ticTacGUI.squares[3]!!
+                .text &&ticTacGUI.squares[0]!!.text ==ticTacGUI.squares[6]!!.text
         ) {
-            theWinner = squares[0]!!.text
+            theWinner =ticTacGUI.squares[0]!!.text
             hightlightWinner(0, 3, 6)
         }
         //Проверяем колонку 2
-        if (squares[1]!!.text != "" && squares[1]!!.text == squares[4]!!
-                .text && squares[1]!!.text == squares[7]!!.text
+        if (ticTacGUI.squares[1]!!.text != "" &&ticTacGUI.squares[1]!!.text ==ticTacGUI.squares[4]!!
+                .text &&ticTacGUI.squares[1]!!.text ==ticTacGUI.squares[7]!!.text
         ) {
-            theWinner = squares[1]!!.text
+            theWinner =ticTacGUI.squares[1]!!.text
             hightlightWinner(1, 4, 7)
         }
         //Проверяем колонку 3
-        if (squares[2]!!.text != "" && squares[2]!!.text == squares[5]!!
-                .text && squares[2]!!.text == squares[8]!!.text
+        if (ticTacGUI.squares[2]!!.text != "" &&ticTacGUI.squares[2]!!.text ==ticTacGUI.squares[5]!!
+                .text &&ticTacGUI.squares[2]!!.text ==ticTacGUI.squares[8]!!.text
         ) {
-            theWinner = squares[2]!!.text
+            theWinner =ticTacGUI.squares[2]!!.text
             hightlightWinner(2, 5, 8)
         }
         //Проверяем первую диагональ
-        if (squares[0]!!.text != "" && squares[0]!!.text == squares[4]!!
-                .text && squares[0]!!.text == squares[8]!!.text
+        if (ticTacGUI.squares[0]!!.text != "" && ticTacGUI.squares[0]!!.text ==ticTacGUI.squares[4]!!
+                .text &&ticTacGUI.squares[0]!!.text ==ticTacGUI.squares[8]!!.text
         ) {
-            theWinner = squares[0]!!.text
+            theWinner =ticTacGUI.squares[0]!!.text
             hightlightWinner(0, 4, 8)
         }
         //Проверяем вторую диагональ
-        if (squares[2]!!.text != "" && squares[2]!!.text == squares[4]!!
-                .text && squares[2]!!.text == squares[6]!!.text
+        if (ticTacGUI.squares[2]!!.text != "" &&ticTacGUI.squares[2]!!.text ==ticTacGUI.squares[4]!!
+                .text &&ticTacGUI.squares[2]!!.text ==ticTacGUI.squares[6]!!.text
         ) {
-            theWinner = squares[2]!!.text
+            theWinner =ticTacGUI.squares[2]!!.text
             hightlightWinner(2, 4, 6)
         }
         return theWinner
@@ -199,20 +97,19 @@ class TicBase : ActionListener {
             selectedSquare = findEmptySquare("X")
         }
         //Если selectedSquare по прежнему равен -1, то попытается занять центр
-        if (selectedSquare == -1 && squares[4]!!.text == "") {
+        if (selectedSquare == -1 &&ticTacGUI.squares[4]!!.text == "") {
             selectedSquare = 4
         }
         //Иначе - занимаем случайню клетку
         if (selectedSquare == -1) {
             selectedSquare = randomSquare
         }
-        squares[selectedSquare]!!.text = "0"
+        ticTacGUI.squares[selectedSquare]!!.text = "0"
     }
 
     /**
      * Этот метод проверяет каждый ряд, колонку и диагональ чтобы узнать, есть ли в ней две клетки
      * с одинаковыми надписями и пустой клеткой.
-     *
      * @param args передается Х - для пользователя и 0 для компьютера
      * @return количество свободных клеток
      * или -1 если не найдено две клетки с одинаковым надписями
@@ -220,9 +117,9 @@ class TicBase : ActionListener {
     fun findEmptySquare(player: String): Int {
         val weight = IntArray(9)
         for (i in weight.indices) {
-            if (squares[i]!!.text == "0") {
+            if (ticTacGUI.squares[i]!!.text == "0") {
                 weight[i] = -1
-            } else if (squares[i]!!.text == "X") {
+            } else if (ticTacGUI.squares[i]!!.text == "X") {
                 weight[i] = 1
             } else {
                 weight[i] = 0
@@ -327,7 +224,7 @@ class TicBase : ActionListener {
             var selectedSquare = -1
             do {
                 selectedSquare = (Math.random() * 9).toInt()
-                if (squares[selectedSquare]!!.text == "") {
+                if (ticTacGUI.squares[selectedSquare]!!.text == "") {
                     gotEmptySquare = true // чтобы выйти из цикла
                 }
 
@@ -340,23 +237,16 @@ class TicBase : ActionListener {
      * @param args клетки которые нужны выделить
      */
     fun hightlightWinner(win1: Int, win2: Int, win3: Int) {
-        squares[win1]!!.background = Color.CYAN
-        squares[win2]!!.background = Color.CYAN
-        squares[win3]!!.background = Color.CYAN
+       ticTacGUI.squares[win1]!!.background = Color.CYAN
+        ticTacGUI.squares[win2]!!.background = Color.CYAN
+       ticTacGUI.squares[win3]!!.background = Color.CYAN
     }
 
     //делаем недоступными клеткии доступной кнопку "Новая игра"
     fun endTheGame() {
-        newGameButton.isEnabled = true
-        for (i in squares.indices) {
-            squares[i]!!.isEnabled = false
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val ticBase = TicBase()
+       ticTacGUI.newGameButton.isEnabled = true
+        for (i in ticTacGUI.squares.indices) {
+           ticTacGUI.squares[i]!!.isEnabled = false
         }
     }
 }
