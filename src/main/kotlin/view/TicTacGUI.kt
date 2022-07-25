@@ -3,8 +3,8 @@
  */
 package view
 
-import Controler.TicTacComputer
-import Controler.TicTacEngine
+import controler.TicTacComputer
+import controler.TicTacEngine
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Font
