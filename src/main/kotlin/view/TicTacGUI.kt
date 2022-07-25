@@ -14,12 +14,12 @@ import javax.swing.JFrame
 import javax.swing.JLabel
 import javax.swing.JPanel
 
-class TicTacGUI  {
+class TicTacGUI {
     var squares = arrayOfNulls<JButton>(9)
     private var frame: JFrame
     var newGameButton: JButton
-    var windowsContent = JPanel()
-    private var playing_field = JPanel()
+    private var windowsContent = JPanel()
+    private var playingField = JPanel()
     var score: JLabel
     var emptySquaresLeft = 9
     private val ticTacEngine = TicTacEngine(this, TicTacComputer(this))
@@ -32,10 +32,10 @@ class TicTacGUI  {
 
         //Создаем шрифты для кнопок и метки счета
         val labelFont = Font(Font.MONOSPACED, Font.BOLD, 30)
-        val newGamebuttonFont = Font(Font.MONOSPACED, Font.BOLD, 30)
+        val newGameButtonFont = Font(Font.MONOSPACED, Font.BOLD, 30)
         val buttonFont = Font(Font.MONOSPACED, Font.BOLD, 60)
         newGameButton = JButton("Новая игра")
-        newGameButton.font = newGamebuttonFont
+        newGameButton.font = newGameButtonFont
 
         //Создаем метку для счета и задаем ее шрифт
         score = JLabel()
@@ -50,11 +50,11 @@ class TicTacGUI  {
 
         //Размещаем кнопки на игровом поле
         val gridLayout = GridLayout(3, 3)
-        playing_field.layout = gridLayout
+        playingField.layout = gridLayout
         for (i in squares.indices) {
-            playing_field.add(squares[i])
+            playingField.add(squares[i])
         }
-        windowsContent.add("Center", playing_field)
+        windowsContent.add("Center", playingField)
         frame = JFrame("Крестики-нолики")
         frame.contentPane = windowsContent
         frame.setSize(500, 600)
@@ -66,10 +66,11 @@ class TicTacGUI  {
         }
         newGameButton.addActionListener(ticTacEngine)
     }
+
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val ticTacGUI = TicTacGUI()
+            TicTacGUI()
         }
     }
 }
