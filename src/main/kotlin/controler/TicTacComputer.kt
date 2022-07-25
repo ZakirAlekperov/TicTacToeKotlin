@@ -8,7 +8,8 @@ import java.awt.Color
 
 class TicTacComputer constructor(private var ticTacGUI: TicTacGUI) {
 
-    private val weight= IntArray(9)
+    private val weight = IntArray(9)
+
     /**
      * Этот метод вызывается после каждого хода, чтобы узнать,
      * есть ли победитель. Он проверяет каждый ряд, колонку и диагональ, чтобы найти
@@ -73,7 +74,7 @@ class TicTacComputer constructor(private var ticTacGUI: TicTacGUI) {
             selectedSquare = findEmptySquare("X")
         }
         //Если selectedSquare по-прежнему равен -1, то попытается занять центр
-        if (selectedSquare == -1 &&ticTacGUI.squares[4]!!.text == "") {
+        if (selectedSquare == -1 && ticTacGUI.squares[4]!!.text == "") {
             selectedSquare = 4
         }
         //Иначе - занимаем случайною клетку
@@ -96,41 +97,42 @@ class TicTacComputer constructor(private var ticTacGUI: TicTacGUI) {
         val twoWeights = if (player == "0") -2 else 2
 
         //Проверяем есть ли в ряду 1 две одинаковые клетки и одна пустая
-        if(weightCheck(0,1,2,twoWeights) != null){
-            return weightCheck(0,1,2,twoWeights)!!
+        if (weightCheck(0, 1, 2, twoWeights) != null) {
+            return weightCheck(0, 1, 2, twoWeights)!!
         }
         //Проверяем есть ли в ряду 2 две одинаковые клетки и одна пустая
-        if(weightCheck(3,4,5,twoWeights) != null){
-            return weightCheck(3,4,5,twoWeights)!!
+        if (weightCheck(3, 4, 5, twoWeights) != null) {
+            return weightCheck(3, 4, 5, twoWeights)!!
         }
         //Проверяем есть ли в ряду 3 две одинаковые клетки и одна пустая
-        if(weightCheck(6,7,8,twoWeights) != null){
-            return weightCheck(6,7,8,twoWeights)!!
+        if (weightCheck(6, 7, 8, twoWeights) != null) {
+            return weightCheck(6, 7, 8, twoWeights)!!
         }
         //Проверяем есть ли в колонке 1 две одинаковые клетки и одна пустая
-        if(weightCheck(0,3,6,twoWeights) != null){
-            return weightCheck(0,3,6,twoWeights)!!
+        if (weightCheck(0, 3, 6, twoWeights) != null) {
+            return weightCheck(0, 3, 6, twoWeights)!!
         }
         //Проверяем есть ли в колонке 2 две одинаковые клетки и одна пустая
-        if(weightCheck(1,4,7,twoWeights) != null){
-            return weightCheck(1,4,7,twoWeights)!!
+        if (weightCheck(1, 4, 7, twoWeights) != null) {
+            return weightCheck(1, 4, 7, twoWeights)!!
         }
         //Проверяем есть ли в колонке 3 две одинаковые клетки и одна пустая
-        if(weightCheck(2,5,8,twoWeights) != null){
-            return weightCheck(2,5,8,twoWeights)!!
+        if (weightCheck(2, 5, 8, twoWeights) != null) {
+            return weightCheck(2, 5, 8, twoWeights)!!
         }
         //Проверяем есть ли в диагонали 1 две одинаковые клетки и одна пустая
-        if(weightCheck(0,4,8,twoWeights) != null){
-            return weightCheck(0,4,8,twoWeights)!!
+        if (weightCheck(0, 4, 8, twoWeights) != null) {
+            return weightCheck(0, 4, 8, twoWeights)!!
         }
         //Проверяем есть ли в диагонали 2 две одинаковые клетки и одна пустая
-        if(weightCheck(2,4,6,twoWeights) != null){
-            return weightCheck(2,4,6,twoWeights)!!
+        if (weightCheck(2, 4, 6, twoWeights) != null) {
+            return weightCheck(2, 4, 6, twoWeights)!!
         }
         //Не найдено двух соседних одинаковых клеток
         return -1
 
     }
+
     /**
      * Этот метод выбирает любую пустую клетку
      * @return случайно выбранный номер клетки
@@ -166,22 +168,23 @@ class TicTacComputer constructor(private var ticTacGUI: TicTacGUI) {
      * Метод делает недоступными клетки и доступной кнопку "Новая игра"
      */
     fun endTheGame() {
-       ticTacGUI.newGameButton.isEnabled = true
+        ticTacGUI.newGameButton.isEnabled = true
         for (i in ticTacGUI.squares.indices) {
-           ticTacGUI.squares[i]!!.isEnabled = false
+            ticTacGUI.squares[i]!!.isEnabled = false
         }
     }
+
     /**
      * Метод проверяет есть в ряду три одинаковых символа
      */
-    private fun lineCheck(button1: Int, button2: Int, button3: Int): String{
-        return if (ticTacGUI.squares[button1]!!.text != "" && ticTacGUI.squares[button2]!!.text ==ticTacGUI.squares[button3]!!
-                .text && ticTacGUI.squares[button1]!!.text ==ticTacGUI.squares[button3]!!.text
+    private fun lineCheck(button1: Int, button2: Int, button3: Int): String {
+        return if (ticTacGUI.squares[button1]!!.text != "" && ticTacGUI.squares[button2]!!.text == ticTacGUI.squares[button3]!!
+                .text && ticTacGUI.squares[button1]!!.text == ticTacGUI.squares[button3]!!.text
         ) {
             highlightWinner(button1, button2, button3)
             ticTacGUI.squares[button1]!!.text
 
-        }else{
+        } else {
             ""
         }
     }
@@ -189,7 +192,7 @@ class TicTacComputer constructor(private var ticTacGUI: TicTacGUI) {
     /**
      * Метод инициализирует массив весов для определения оптимального хода компьютера
      */
-    private fun weightInitialisation(){
+    private fun weightInitialisation() {
         for (i in weight.indices) {
             when (ticTacGUI.squares[i]!!.text) {
                 "0" -> {
@@ -205,21 +208,21 @@ class TicTacComputer constructor(private var ticTacGUI: TicTacGUI) {
         }
     }
 
-     /**
+    /**
      * Метод возвращает номер пустой клетки в ряду с двумя одинаковыми или null если подходящей клетки нет
      */
-    private fun weightCheck(button1: Int, button2: Int, button3: Int, twoWeights:Int): Int? {
+    private fun weightCheck(button1: Int, button2: Int, button3: Int, twoWeights: Int): Int? {
         if (weight[button1] + weight[button2] + weight[button3] == twoWeights) {
             return if (weight[button1] == 0) {
                 button1
             } else if (weight[button2] == 0) {
                 button2
-            } else if (weight[button3] ==0){
+            } else if (weight[button3] == 0) {
                 button3
-            }else{
+            } else {
                 null
             }
         }
-         return null
+        return null
     }
 }
